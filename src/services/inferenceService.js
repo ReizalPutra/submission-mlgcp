@@ -4,7 +4,6 @@ import sharp from 'sharp';
 async function validateImageFormat(buffer) {
     try {
         const metadata = await sharp(buffer).metadata();
-        console.log('Image metadata:', metadata);
 
         // Menolak gambar grayscale (1 saluran)
         if (metadata.channels !== 3) {
@@ -69,10 +68,9 @@ export async function predictClassification(model, imageBuffer) {
             suggestion: suggestion,
         };
     } catch (err) {
-        console.error('Error saat prediksi:', err.message);
         throw {
             statusCode: 400,
-            message: err.message
+            message: 'Terjadi kesalahan dalam melakukan prediksi'
         };
     }
 }

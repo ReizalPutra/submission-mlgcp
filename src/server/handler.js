@@ -1,6 +1,6 @@
 import {predictClassification} from "../services/inferenceService.js";
 import {randomUUID} from "crypto";
-import storeData from "../services/storedata.js";
+import {getData, storeData} from "../services/dataFirestore.js";
 
 
 async function postPredictHandler(req, res){
@@ -23,11 +23,25 @@ async function postPredictHandler(req, res){
             data
         });
     }catch(err){
-        console.log(err);
         res.status(err.statusCode || 500).send({
             status: "fail",
             message: err.message});
     }
 }
 
-export {postPredictHandler};
+async function getPredictHandler(req, res){
+    try {
+        const result = await getData();
+        res.status(200).send({
+            status: "success",
+            data: [result]
+        })
+    }catch(err){
+        res.status(err.statusCode || 500).send({
+            status: "fail",
+            message: err.message
+        })
+    }
+}
+
+export {postPredictHandler, getPredictHandler};
